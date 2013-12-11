@@ -9,6 +9,7 @@ var i = 0;
 var timer;
 context.fillRect(x, y, width, height);
 
+// return where the mouse was clicked
 function trackMouse(event){
 	var mouseX = new Number();
 	var mouseY = new Number();
@@ -27,6 +28,8 @@ function trackMouse(event){
 	return [mouseX, mouseY];
 }
 
+// guages which direction to push the block 
+// depending on where the mouse was clicked
 function calculateMovement(mousePos){
 	var squareCenterX = x + width/2;
 	var squareCenterY = y + height/2;
@@ -39,14 +42,22 @@ function calculateMovement(mousePos){
 	return [P3x, P3y];
 }
 
+// click the mouse, push the block
 function move(event){
 	var mousePos = trackMouse(event);
 	var direction = calculateMovement(mousePos);
+	// if the timer exists from a previous instance 
+	// remove it! 
 	if (typeof timer != undefined){
 		clearInterval(timer);
 		i = 0;
 	}
 	timer = setInterval(function(){
+		// collision detection!
+		direction[0] = (x + width >= canvas.width || x <= 0 ) ? direction[0] * -1 : direction[0];
+		direction[1] = (y + height >= canvas.height || y <= 0 ) ? direction[1] * -1 : direction[1];
+
+		// this literally moves the square
 		x = x - direction[0];
 		y = y - direction[1];
 		i++;
