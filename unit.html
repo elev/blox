@@ -84,15 +84,15 @@
 					block.dy = d * (mouseY - squareCenterY) / mag;
 				}
 				this.tick = function(){
+					// collision detection
+					this.dx = (this.x + this.width >= canvas.width || this.x <= 0 ) ? this.dx * -1 : this.dx;
+					this.dy = (this.y + this.height >= canvas.height || this.y <= 0 ) ? this.dy * -1 : this.dy;
+
 					this.x -= this.dx;
 					this.y -= this.dy;
-				//	console.log(this.x);
 					this.draw();
 				}
 			}
-
-			// add dx dy variables, set these to automatic 1,
-			// we will create a function called "change direction"
 
 			function clear(canvas, context){
 				context.clearRect(0, 0, 700, 700);
