@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Blox</title>
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+	</head>
+
+	<body>
+		<canvas width="700" height="700"></canvas>
+
+		<script type="text/javascript" src="js/canvas.js"></script>
+
+
+		<script type="text/javascript">
+			// return where the mouse was clicked
+			function trackMouse(event){
+				var mouseX = new Number();
+				var mouseY = new Number();
+				if (event.x != undefined && event.y != undefined){
+					mouseX = event.x;
+					mouseY = event.y;
+				}else{
+					mouseX = event.clientX + document.body.scrollLeft +
+							document.documentElement.scrollLeft;
+					mouseY = event.clientY + document.body.scrollTop +
+							document.documentElement.scrollTop;
+				}
+
+				mouseX -= canvas.offsetLeft;
+				mouseY -= canvas.offsetTop;
+				return [mouseX, mouseY];
+			}
+
+			function calculateMovement(mousePos){
+				var squareCenterX = x + width/2;
+				var squareCenterY = y + height/2;
+				var d = 1;
+				var mag = Math.sqrt(Math.pow(mousePos[0] - squareCenterX, 2)
+						 + Math.pow(mousePos[1] - squareCenterY, 2));
+
+				var P3x = d * (mousePos[0] - squareCenterX) / mag;
+				var P3y = d * (mousePos[1] - squareCenterY) / mag;
+				return [P3x, P3y];
+			}
+
+			function Block(context, x, y, width, height){
+				this.x = x||0;
+				this.y = y||0;
+				this.width = width||0;
+				this.height = height||0;
+				this.dx = 0;
+				this.dy = 0;
+				var block = this;
+				this.draw = function(){
+					console.log(this.x);
+					context.fillRect(this.x, this.y, this.width, this.height);
+				}
+				this.changeDirection = function(event){
+					console.log(this);
+					// first, get the mouse click position
+					var mouseX = new Number();
+					var mouseY = new Number();
+					if (event.x != undefined && event.y != undefined){
+						mouseX = event.x;
+						mouseY = event.y;
+					}else{
+						mouseX = event.clientX + document.body.scrollLeft +
+								document.documentElement.scrollLeft;
+						mouseY = event.clientY + document.body.scrollTop +
+								document.documentElement.scrollTop;
+					}
+					mouseX -= canvas.offsetLeft;
+					mouseY -= canvas.offsetTop;
+					// use the mouse position to change
+					// the direction variables
+					var squareCenterX = block.x + block.width/2;
+					var squareCenterY = block.y + block.height/2;
+					var d = 1;
+
+					var mag = Math.sqrt(Math.pow(mouseX - squareCenterX, 2)
+						 + Math.pow(mouseY - squareCenterY, 2));
+
+					block.dx = d * (mouseX - squareCenterX) / mag;
+					block.dy = d * (mouseY - squareCenterY) / mag;
+				}
+				this.tick = function(){
+					this.x -= this.dx;
+					this.y -= this.dy;
+				//	console.log(this.x);
+					this.draw();
+				}
+			}
+
+			// add dx dy variables, set these to automatic 1,
+			// we will create a function called "change direction"
+
+			function clear(canvas, context){
+				context.clearRect(0, 0, 700, 700);
+			}
+
+			function loop(canvas, context, blocks){
+				clear(canvas, context);
+				for( var i=0; i<blocks.length; i++){
+					blocks[i].tick();
+				}
+			}
+
+			(function init(){
+				var canvas = document.getElementsByTagName('canvas')[0];
+				var context = canvas.getContext('2d');
+				block1 = new Block(context, 50, 50, 50, 50);
+				block2 = new Block(context, 300, 300, 50, 50);
+				block3 = new Block(context, 500, 500, 50, 50);
+				canvas.addEventListener('click',block1.changeDirection);
+
+
+				var blocks = [block1, block2, block3];
+				setInterval(function(){
+					loop(canvas, context, blocks);
+
+				}, 10);
+
+			})();
+
+
+
+
+
+
+		</script>
+	</body>
+
+<html>
