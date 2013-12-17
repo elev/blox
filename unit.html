@@ -52,11 +52,9 @@
 				this.dy = 0;
 				var block = this;
 				this.draw = function(){
-					console.log(this.x);
 					context.fillRect(this.x, this.y, this.width, this.height);
 				}
 				this.changeDirection = function(event){
-					console.log(this);
 					// first, get the mouse click position
 					var mouseX = new Number();
 					var mouseY = new Number();
@@ -83,11 +81,21 @@
 					block.dx = d * (mouseX - squareCenterX) / mag;
 					block.dy = d * (mouseY - squareCenterY) / mag;
 				}
-				this.tick = function(){
+				this.tick = function(isAi){
 					// collision detection
-					this.dx = (this.x + this.width >= canvas.width || this.x <= 0 ) ? this.dx * -1 : this.dx;
-					this.dy = (this.y + this.height >= canvas.height || this.y <= 0 ) ? this.dy * -1 : this.dy;
-
+					if (isAi === false){
+						// for the player
+						this.dx = (this.x + this.width >= canvas.width || this.x <= 0 ) ? this.dx * -1 : this.dx;
+						this.dy = (this.y + this.height >= canvas.height || this.y <= 0 ) ? this.dy * -1 : this.dy;
+					}else{
+						// for the ai,
+						// first, random positive or negative x y values
+						var xRand = Math.round(Math.random());
+						var yRand = Math.round(Math.random());
+						// get the actual xy values
+						this.dx = (xRand === 0) ? -1 * Math.random() : Math.random();
+						this.dy = (yRand === 0) ? -1 * Math.random() : Math.random();
+					}
 					this.x -= this.dx;
 					this.y -= this.dy;
 					this.draw();
@@ -98,10 +106,14 @@
 				context.clearRect(0, 0, 700, 700);
 			}
 
-			function loop(canvas, context, blocks){
+			function loop(canvas, context, blocks, mod){
 				clear(canvas, context);
 				for( var i=0; i<blocks.length; i++){
-					blocks[i].tick();
+					if (i != 0 && mod == 0){
+						blocks[i].tick(true);
+					}else{
+						blocks[i].tick(false);
+					}
 				}
 			}
 
@@ -115,8 +127,14 @@
 
 
 				var blocks = [block1, block2, block3];
+				var k = 0;
 				setInterval(function(){
-					loop(canvas, context, blocks);
+					// set up ai intelligence... if its an ai...
+					var aiMotionLength = Math.floor(Math.random() * 500);
+					var mod = k%aiMotionLength;
+					//
+					loop(canvas, context, blocks, mod);
+					k++;
 
 				}, 10);
 
