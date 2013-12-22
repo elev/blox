@@ -112,11 +112,11 @@
 						if (blocksAll[i] !== this){
 							if(isCollide(this, blocksAll[i])){
 								if(this.width < blocksAll[i].width){
-									this.width = this.width - 5;
-									this.height = this.height + 5;
+									this.width -= 2;
+									this.height -= 2;
 								}else if(this.width > blocksAll[i].width){
-									this.width = this.width + 5;
-									this.height = this.height + 5;
+									this.width += 2;
+									this.height += 2;
 								}
 							}
 						}
