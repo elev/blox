@@ -52,7 +52,9 @@
 				this.dy = 0;
 				var block = this;
 				this.draw = function(){
-					context.fillRect(this.x, this.y, this.width, this.height);
+					if (this.width > 0){
+						context.fillRect(this.x, this.y, this.width, this.height);
+					}
 				}
 				this.changeDirection = function(event){
 					// first, get the mouse click position
@@ -82,11 +84,13 @@
 					block.dy = d * (mouseY - squareCenterY) / mag;
 				}
 				this.tick = function(isAi){
-					// collision detection
+					// collision detection for walls
 					if (isAi === false){
 						// for the player
-						this.dx = (this.x + this.width >= canvas.width || this.x <= 0 ) ? this.dx * -1 : this.dx;
-						this.dy = (this.y + this.height >= canvas.height || this.y <= 0 ) ? this.dy * -1 : this.dy;
+						this.dx = (this.x + this.width >= canvas.width || this.x <= 0 ) ? 
+									this.dx * -1 : this.dx;
+						this.dy = (this.y + this.height >= canvas.height || this.y <= 0 ) ? 
+									this.dy * -1 : this.dy;
 					}else{
 						// for the ai,
 						// first, random positive or negative x y values
@@ -98,7 +102,64 @@
 					}
 					this.x -= this.dx;
 					this.y -= this.dy;
+					this.collision(blocksAll);
 					this.draw();
+				}
+				// keeping track of all the blocks via array.
+				blocksAll.push(this);
+				this.collision = function(blocksAll){
+					for (var i = 0; i < blocksAll.length; i++) {
+						if (blocksAll[i] !== this){
+							if(isCollide(this, blocksAll[i])){
+								if(this.width < blocksAll[i].width){
+									this.width = this.width - 5;
+									this.height = this.height + 5;
+								}else if(this.width > blocksAll[i].width){
+									this.width = this.width + 5;
+									this.height = this.height + 5;
+								}
+							}
+						}
+					};
+				}
+			}
+			// array to keep track of all the blocks
+			var blocksAll = [];
+
+
+
+
+			function isCollide(a, b) {
+				return !(
+					((a.y + a.height) < (b.y)) || 
+					(a.y > (b.y + b.height)) ||
+					((a.x + a.width) < b.x) || (
+					a.x > (b.x + b.width))
+				);
+			}
+			/**
+			* Check if this block is colloding with other blocks.
+			* @ param, others: array, this is an array of the other blocks
+			* There has to be a better algorithm for this elsewhere?
+			* recursion is the answer here....
+			**/
+			checkCollosion = function(others){
+				// may be buggy because we're using others here,
+				// and others is in the next scope up, they may be 
+				// competing in scope?
+				var subject = others.pop();
+				for (var i=0; i<others.length; i++){
+					if(isCollide(subject, others[i])){
+						// console.log('hit');
+						// // collosion is true, the biggest eats the smallest
+						// console.log('subj: ' + subject.width);
+						// console.log('oth: ' + others[i].width);
+						if(subject.width < others[i].width){
+							console.log('eat');
+							others.width = others.width + 10;
+							subject.width = subject.width - 10;
+						}
+					}
 				}
 			}
 
@@ -109,6 +170,7 @@
 			function loop(canvas, context, blocks, mod){
 				clear(canvas, context);
 				for( var i=0; i<blocks.length; i++){
+					// check if blocks are colliding...
 					if (i != 0 && mod == 0){
 						blocks[i].tick(true);
 					}else{
@@ -121,8 +183,8 @@
 				var canvas = document.getElementsByTagName('canvas')[0];
 				var context = canvas.getContext('2d');
 				block1 = new Block(context, 50, 50, 50, 50);
-				block2 = new Block(context, 300, 300, 50, 50);
-				block3 = new Block(context, 500, 500, 50, 50);
+				block2 = new Block(context, 300, 300, 48, 48);
+				block3 = new Block(context, 500, 500, 47, 47);
 				canvas.addEventListener('click',block1.changeDirection);
 
 
@@ -133,17 +195,16 @@
 					var aiMotionLength = Math.floor(Math.random() * 500);
 					var mod = k%aiMotionLength;
 					//
+					// var others = [block1, block2, block3];
+					// checkCollosion(others);
 					loop(canvas, context, blocks, mod);
+
+
 					k++;
 
 				}, 10);
 
 			})();
-
-
-
-
-
 
 		</script>
 	</body>
