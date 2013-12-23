@@ -28,9 +28,8 @@
 			var blocksAll = [];
 
 
-			/**
-			* trackmouse, returns array of mouse click coordinates
-			*/
+			
+			// trackmouse, returns array of mouse click coordinates
 			function trackMouse(event){
 				var mouseX = new Number();
 				var mouseY = new Number();
@@ -49,11 +48,10 @@
 				return [mouseX, mouseY];
 			}
 
-			/**
-			* calculateMovement, returns an array
-			* this points the block in a direction
-			* depending on where the mouse was clicked
-			*/
+			
+			// calculateMovement, returns an array
+			// this points the block in a direction
+			// depending on where the mouse was clicked
 			function calculateMovement(mousePos){
 				var squareCenterX = x + width/2;
 				var squareCenterY = y + height/2;
@@ -188,13 +186,27 @@
 				}
 			}
 
+			// generate a random number between 2 numbers
+			function randomFromInterval(from,to){
+				return Math.floor(Math.random()*(to-from+1)+from);
+			}
+			// Create enemy blocks based on 
+			// the enemy amount, give them random size
+			// and positioning.
+			function createEnemyBlocks(enemyBlockAmount){
+				for (var i = 0; i < enemyBlockAmount; i++) {
+					var posX = randomFromInterval(0, canvas.width);
+					var posY = randomFromInterval(0, canvas.height);
+					var heightWidth = randomFromInterval(0, 70);
+					this.block = new Block(context, posX, posY, heightWidth, heightWidth);
+				};
+			}
 			// initialize the application
 			(function init(){
 				var canvas = document.getElementsByTagName('canvas')[0];
 				var context = canvas.getContext('2d');
 				block1 = new Block(context, 50, 50, 50, 50);
-				block2 = new Block(context, 300, 300, 48, 48);
-				block3 = new Block(context, 500, 500, 47, 47);
+				createEnemyBlocks(enemyBlockAmount);
 				canvas.addEventListener('click',block1.changeDirection);
 
 
