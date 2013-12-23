@@ -12,7 +12,25 @@
 
 
 		<script type="text/javascript">
-			// return where the mouse was clicked
+			/**
+			* enemyBlockAmount; int; 
+			* the amount of enemy blocks to create;
+			*/
+			var enemyBlockAmount = 10;
+			/**
+			* blocksAll; array
+			* array that keeps track of blocks
+			* in the block constructor the blocks
+			* get added to this array
+			* when a block is "killed" 
+			* it is removed from this array
+			*/
+			var blocksAll = [];
+
+
+			/**
+			* trackmouse, returns array of mouse click coordinates
+			*/
 			function trackMouse(event){
 				var mouseX = new Number();
 				var mouseY = new Number();
@@ -31,6 +49,11 @@
 				return [mouseX, mouseY];
 			}
 
+			/**
+			* calculateMovement, returns an array
+			* this points the block in a direction
+			* depending on where the mouse was clicked
+			*/
 			function calculateMovement(mousePos){
 				var squareCenterX = x + width/2;
 				var squareCenterY = y + height/2;
@@ -43,6 +66,9 @@
 				return [P3x, P3y];
 			}
 
+			/**
+			* Block constructor
+			*/
 			function Block(context, x, y, width, height){
 				this.x = x||0;
 				this.y = y||0;
@@ -54,8 +80,10 @@
 				this.draw = function(){
 					context.fillRect(this.x, this.y, this.width, this.height);
 				}
+
+				// changes direction based on mouse click for the player
+				// generates a random direction for the AI
 				this.changeDirection = function(event){
-					// first, get the mouse click position
 					var mouseX = new Number();
 					var mouseY = new Number();
 					if (event.x != undefined && event.y != undefined){
@@ -69,8 +97,6 @@
 					}
 					mouseX -= canvas.offsetLeft;
 					mouseY -= canvas.offsetTop;
-					// use the mouse position to change
-					// the direction variables
 					var squareCenterX = block.x + block.width/2;
 					var squareCenterY = block.y + block.height/2;
 					var d = 1;
@@ -81,20 +107,20 @@
 					block.dx = d * (mouseX - squareCenterX) / mag;
 					block.dy = d * (mouseY - squareCenterY) / mag;
 				}
+				// runs inside of the init loop.
+				// this runs the draw, collosion, and killMe functions
 				this.tick = function(isAi){
 					this.width <= 0 ? this.killMe(blocksAll) : false;
+					// code in the if statement handles checks if
+					// the block is hitting a wall and changes a direction if so
 					if (isAi === false){
-						// for the player
 						this.dx = (this.x + this.width >= canvas.width || this.x <= 0 ) ? 
 									this.dx * -1 : this.dx;
 						this.dy = (this.y + this.height >= canvas.height || this.y <= 0 ) ? 
 									this.dy * -1 : this.dy;
 					}else{
-						// for the ai,
-						// first, random positive or negative x y values
 						var xRand = Math.round(Math.random());
 						var yRand = Math.round(Math.random());
-						// get the actual xy values
 						this.dx = (xRand === 0) ? -1 * Math.random() : Math.random();
 						this.dy = (yRand === 0) ? -1 * Math.random() : Math.random();
 					}
@@ -103,8 +129,8 @@
 					this.collision(blocksAll);
 					this.draw();
 				}
-				// keeping track of all the blocks via array.
-				blocksAll.push(this);
+				// if this block has collided with another block
+				// change the width and height parameters
 				this.collision = function(blocksAll){
 					for (var i = 0; i < blocksAll.length; i++) {
 						if (blocksAll[i] !== this){
@@ -131,9 +157,9 @@
 						}
 					}
 				}
+				// keep track of this block in blocksAll array
+				blocksAll.push(this);
 			}
-			// array to keep track of all the blocks
-			var blocksAll = [];
 
 			// check if two elements have collided.
 			function isCollide(a, b) {
@@ -145,15 +171,15 @@
 				);
 			}
 
+			// clears the canvas
 			function clear(canvas, context){
 				context.clearRect(0, 0, 700, 700);
 			}
 
-			// clear canvas, redraw blocks, and perform other time based operations...
+			// clear canvas run each blocks tick function
 			function loop(canvas, context, blocks, mod){
 				clear(canvas, context);
 				for( var i=0; i<blocks.length; i++){
-					// check if blocks are colliding...
 					if (i != 0 && mod == 0){
 						blocks[i].tick(true);
 					}else{
@@ -162,6 +188,7 @@
 				}
 			}
 
+			// initialize the application
 			(function init(){
 				var canvas = document.getElementsByTagName('canvas')[0];
 				var context = canvas.getContext('2d');
@@ -171,7 +198,6 @@
 				canvas.addEventListener('click',block1.changeDirection);
 
 
-			//	var blocks = [block1, block2, block3];
 				var k = 0;
 				setInterval(function(){
 					// set up ai intelligence... if its an ai...
