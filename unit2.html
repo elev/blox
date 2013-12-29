@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Blox</title>
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+	</head>
+
+	<body>
+		<canvas width="700" height="700"></canvas>
+
+		<script type="text/javascript" src="js/canvas.js"></script>
+
+
+		<script type="text/javascript">
+			var canvas = document.getElementsByTagName('canvas')[0];
+			var context = canvas.getContext('2d');
+			
+			// block, top level block.
+
+			/* what a block needs...
+			* c'tor
+			* x and y axis (int)
+			* width and height (int)
+			* direction x and y (floats)
+
+			* function -- check collision
+			* function -- change direction
+			* function -- draw
+			* function -- check wall collision
+			* function -- tick
+			* function -- destructor
+			*/
+			function Block(x, y, width, height, dx, dy){
+				this.x = x || 0;
+				this.y = y || 0;
+				this.width = width || 0;
+				this.height = height || 0;
+				this.dx = dx || 0;
+				this.dy = dy || 0;
+				this.hit = function(){
+					console.log('hi');
+				}
+				this.charger = function(){
+					console.log('philip rivers');
+				}
+			}
+
+			function Block1(x,y,width,height,dx,dy){
+				Block.apply(this, arguments);
+				this.hit2 = function(){
+					console.log('yayaya');
+				}
+			}
+
+			// Block1.prototype = new Block();
+
+			var james = new Block1;
+			james.hit();
+			james.hit2();
+			james.charger();
+
+
+
+			function Block2(x,y,width,height,dx,dy){
+				Block.apply(this, arguments);
+				this.hit = function(){
+					console.log('derpenstein');
+				}
+			}
+
+			// Block2.prototype = new Block();
+
+			var phil = new Block2(5,6,7,1,2,3);
+			phil.hit();
+			phil.charger();
+			console.log(phil.x);
+		</script>
+	</body>
+
+<html>
