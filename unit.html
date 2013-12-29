@@ -105,12 +105,10 @@
 					block.dx = d * (mouseX - squareCenterX) / mag;
 					block.dy = d * (mouseY - squareCenterY) / mag;
 				}
-				// runs inside of the init loop.
-				// this runs the draw, collosion, and killMe functions
-				this.tick = function(isAi){
-					this.width <= 0 ? this.killMe(blocksAll) : false;
-					// code in the if statement handles checks if
-					// the block is hitting a wall and changes a direction if so
+
+				// code in the if statement handles checks if
+				// the block is hitting a wall and changes a direction if so
+				this.wallCollide = function(isAi){
 					if (isAi === false){
 						this.dx = (this.x + this.width >= canvas.width || this.x <= 0 ) ? 
 									this.dx * -1 : this.dx;
@@ -122,8 +120,15 @@
 						this.dx = (xRand === 0) ? -1 * Math.random() : Math.random();
 						this.dy = (yRand === 0) ? -1 * Math.random() : Math.random();
 					}
+				}
+				// runs inside of the init loop.
+				// this runs the draw, collosion, and killMe functions
+				this.tick = function(isAi){
+					this.width <= 0 ? this.killMe(blocksAll) : false;
+					this.wallCollide(isAi);
 					this.x -= this.dx;
 					this.y -= this.dy;
+					console.log('dx ' + this.dx + 'dy ' + this.dy);
 					this.collision(blocksAll);
 					this.draw();
 				}
