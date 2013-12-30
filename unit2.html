@@ -12,18 +12,20 @@
 
 
 		<script type="text/javascript">
+			// canvas
 			var canvas = document.getElementsByTagName('canvas')[0];
 			var context = canvas.getContext('2d');
-			
-			// block, top level block.
+			//
 
-			/* what a block needs...
+			// objects
+
+			/* Top level block.. like an abstract class...
 			* c'tor
 			* x and y axis (int)
 			* width and height (int)
 			* direction x and y (floats)
 
-			* function -- check collision
+			* function -- check block collision
 			* function -- change direction
 			* function -- draw
 			* function -- check wall collision
@@ -37,43 +39,30 @@
 				this.height = height || 0;
 				this.dx = dx || 0;
 				this.dy = dy || 0;
-				this.hit = function(){
-					console.log('hi');
-				}
-				this.charger = function(){
-					console.log('philip rivers');
-				}
 			}
 
-			function Block1(x,y,width,height,dx,dy){
+			/* children of block
+			* using apply for inheritance and pass arguments
+			*/
+			// AI block
+			function AIblock(x, y, width, height, dx, dy){
 				Block.apply(this, arguments);
-				this.hit2 = function(){
-					console.log('yayaya');
-				}
 			}
 
-			// Block1.prototype = new Block();
-
-			var james = new Block1;
-			james.hit();
-			james.hit2();
-			james.charger();
-
-
-
-			function Block2(x,y,width,height,dx,dy){
+			// The players block
+			function Pblock(x, y, width, height, dx, dy){
 				Block.apply(this, arguments);
-				this.hit = function(){
-					console.log('derpenstein');
-				}
 			}
 
-			// Block2.prototype = new Block();
+			var james = new Pblock(5, 5, 5, 5, 5, 5);
+			//
 
-			var phil = new Block2(5,6,7,1,2,3);
-			phil.hit();
-			phil.charger();
-			console.log(phil.x);
+			
+			// helper functions...
+
+			//
+
+
 		</script>
 	</body>
 
