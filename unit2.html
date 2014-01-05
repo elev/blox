@@ -135,7 +135,6 @@
 				Block.apply(this, arguments);
 				this.incrementer = 0;
 				this.aiMotionLength = Math.floor(Math.random() * 500);
-				console.log(this.aiMotionLength);
 				// generate random directions.
 				this.changeDirection = function(){
 					var xRand = Math.round(Math.random());
@@ -189,6 +188,8 @@
 
 					block.dx = d * (mouseX - squareCenterX) / mag;
 					block.dy = d * (mouseY - squareCenterY) / mag;
+
+					console.log(block.dx);
 				}
 			}
 		//
@@ -222,7 +223,11 @@
 					var posX = randomFromInterval(0, canvas.width);
 					var posY = randomFromInterval(0, canvas.height);
 					var heightWidth = randomFromInterval(0, 70);
-					this.block = new AIblock(posX, posY, heightWidth, heightWidth);
+					var iniDx = Math.random() * -1;
+					var iniDy = Math.random() * -1;
+					this.block = new AIblock(posX, posY, 
+											heightWidth, heightWidth, 
+											iniDx, iniDy);
 				};
 			}
 
