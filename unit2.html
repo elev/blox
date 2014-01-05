@@ -88,6 +88,12 @@
 					// }
 				}
 				//
+				// function to change direction,
+				// used in an abstract sort of way
+				// since children will have different implementations of it.
+				this.changeDirection = function(){
+					// abstract method.
+				}
 				// if this block has collided with another block
 				// change the width and height parameters
 				this.collision = function(blocksAll){
@@ -127,11 +133,19 @@
 			// AI block
 			function AIblock(x, y, width, height, dx, dy){
 				Block.apply(this, arguments);
+				this.changeDirection = function(event){
+				
+				}
 			}
 
 			// The players block
 			function Pblock(x, y, width, height, dx, dy){
+				Block.apply(this, arguments);
+				var block = this;
+				// player block changes direction on
+				// mouse click
 				this.changeDirection = function(event){
+					//console.log(block);
 					var mouseX = new Number();
 					var mouseY = new Number();
 					if (event.x != undefined && event.y != undefined){
@@ -209,9 +223,9 @@
 			(function init(){
 				var canvas = document.getElementsByTagName('canvas')[0];
 				var context = canvas.getContext('2d');
-				block1 = new Pblock(50, 50, 50, 50);
+				var player = new Pblock(50, 50, 50, 50);
+				canvas.addEventListener('click', player.changeDirection);
 				createEnemyBlocks(enemyBlockAmount);
-				canvas.addEventListener('click',block1.changeDirection);
 				var k = 0;
 				setInterval(function(){
 					// set up ai intelligence... if its an ai...
