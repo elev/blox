@@ -23,7 +23,7 @@
 		//
 
 		// GLOBALS
-			var enemyBlockAmount = 10;
+			var enemyBlockAmount = 20;
 			// blocks all - array - contains all block in the application
 			// used to loop through all the blocks and perform 
 			// necessary destruct and creation methods.
@@ -55,6 +55,7 @@
 				this.dy = dy || 0;
 
 				this.draw = function(){
+					context.fillStyle = 'red';
 					context.fillRect(this.x, this.y, 
 									this.width, this.height);
 				}
@@ -153,6 +154,11 @@
 			// The players block
 			function Pblock(x, y, width, height, dx, dy){
 				Block.apply(this, arguments);
+				this.draw = function(){
+					context.fillStyle = 'blue';
+					context.fillRect(this.x, this.y, 
+					          			this.width, this.height);
+				}
 				var block = this;
 				// player block changes direction on
 				// mouse click
