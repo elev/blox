@@ -6,18 +6,15 @@
 	</head>
 
 	<body>
-		<canvas width="700" height="700"></canvas>
+		<canvas width="" height="700"></canvas>
 
 		<script type="text/javascript" src="js/canvas.js"></script>
 
 
 		<script type="text/javascript">
-
-		/* TODO:
-			1. Get the block functions fleshed out and test.
-			2. Start implementing the game, most of the helper functions
-				from unit one should work great.
-		*/
+			// add this to the canvas code...
+			var canvasWidth = window.innerWidth;
+			canvas.width = canvasWidth;
 
 
 		// canvas
@@ -201,7 +198,7 @@
 
 			// clears the canvas
 			function clear(canvas, context){
-				context.clearRect(0, 0, 700, 700);
+				context.clearRect(0, 0, canvas.width, canvas.height);
 			}
 
 			// generate a random number between 2 numbers
