@@ -11,4 +11,11 @@ Recent update
 
 TODO:
 
-Edit styles, make the design easier on the eyes.
+Create a Blox that is made out of Blox as the logo,
+have this replace "welcome to blox"
+
+Make game end when you eat everything or get eaten and display a message...
+
+Then have it go back to the start button.
+
+Maybe create a score area.
