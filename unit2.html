@@ -13,8 +13,8 @@
 
 		<script type="text/javascript">
 			// add this to the canvas code...
-			var canvasWidth = window.innerWidth;
-			canvas.width = canvasWidth;
+			canvas.width = window.innerWidth;
+
 
 
 		// canvas
@@ -28,6 +28,8 @@
 			// used to loop through all the blocks and perform 
 			// necessary destruct and creation methods.
 			var blocksAll = [];
+			// game interval is a setInterval timer...
+			var gameInterval = '';
 
 		//
 
@@ -70,7 +72,6 @@
 				//
 				// check if block is colliding against wall.
 				this.wallCollide = function(){
-					//console.log(this.dx);
 					if (this.x + this.width >= canvas.width && this.dx < 0 ||
 						this.x <= 0 && this.dx > 0){
 						this.dx = this.dx * -1;
@@ -163,7 +164,6 @@
 				// player block changes direction on
 				// mouse click
 				this.changeDirection = function(event){
-					//console.log(block);
 					var mouseX = new Number();
 					var mouseY = new Number();
 					if (event.x != undefined && event.y != undefined){
@@ -186,7 +186,6 @@
 
 					block.dx = d * (mouseX - squareCenterX) / mag;
 					block.dy = d * (mouseY - squareCenterY) / mag;
-					console.log(block.dx);
 				}
 			}
 		//
@@ -235,31 +234,76 @@
 
 			// clear canvas run each blocks tick function.
 			function loop(canvas, context, blocks, mod){
-				clear(canvas, context);
 				for( var i=0; i<blocks.length; i++){
 					blocks[i].tick();
 				}
 			}
 		//
 
-		// initialize the application
-			(function init(){
-				var canvas = document.getElementsByTagName('canvas')[0];
-				var context = canvas.getContext('2d');
+		// Helper functions for initializing the application
+			function createPlayer(){
 				var player = new Pblock(50, 50, 50, 50);
 				canvas.addEventListener('click', player.changeDirection);
-				createEnemyBlocks(enemyBlockAmount);
+			}
+
+			function runGameInterval(initial){
 				var k = 0;
-				setInterval(function(){
+				var j = 0;
+				gameInterval = setInterval(function(){
 					// set up ai intelligence... if its an ai...
 					var aiMotionLength = Math.floor(Math.random() * 500);
 					var mod = k%aiMotionLength;
 					//
+					clear(canvas, context);
 					loop(canvas, context, blocksAll, mod);
+					(initial === true) ? showIntroText(j) : '';
 					k++;
+					j = (j <= 100) ? j + 1 : j = 0;
 
 				}, 10);
+			}
+
+			function initGame(){
+				blocksAll = [];
+				clearInterval(gameInterval);
+				createEnemyBlocks(enemyBlockAmount);
+				createPlayer();
+				runGameInterval(false);
+			}
+
+			function showIntroText(j){
+				context.font = '40pt arial';
+				context.fillStyle = 'white';
+				var maxWidth = 400;
+				var textX = (canvas.width / 2) - (maxWidth / 2);
+				context.fillText('Welcome To Blox', textX, 200, maxWidth);
+				context.font = '20pt arial';
+				if (j < 50 ){
+      				context.fillText('Press spacebar to begin.', textX + 50, 300, maxWidth);
+      			}
+			}
+		// 
+		
+		// initialize the application
+
+			(function init(){
+				var canvas = document.getElementsByTagName('canvas')[0];
+				var context = canvas.getContext('2d');
+				createEnemyBlocks(enemyBlockAmount);
+				showIntroText();
+				runGameInterval(true);
 			})();
+
+			// start playing by pressing the spacebar...
+			document.onkeypress = function(evt) {
+				evt = evt || window.event;
+				var charCode = evt.keyCode || evt.which;
+				// commenting out in case I want to grab the string later.
+				// var charStr = String.fromCharCode(charCode);
+				if (charCode == '32') {
+					initGame();
+				}
+			};
 		//
 
 		</script>
