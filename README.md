@@ -3,19 +3,11 @@ blox
 
 A game of blocks.
 ----
-To play run the unit2.html script in your browser.
+To play run the index.html script in your browser.
+
+Feel free to add to it or take it and do whatever you wish.
 ----
 
-Recent update
-	- Fixed wall collision bug. 
-
 TODO:
+When you eat everything or get eaten display a message and end the game.
 
-Create a Blox that is made out of Blox as the logo,
-have this replace "welcome to blox"
-
-Make game end when you eat everything or get eaten and display a message...
-
-Then have it go back to the start button.
-
-Maybe create a score area.
