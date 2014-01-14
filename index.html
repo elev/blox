@@ -6,8 +6,50 @@
 	</head>
 
 	<body>
-		<canvas width="700" height="700"></canvas>
+		<canvas width="" height="700"></canvas>
+
 		<script type="text/javascript" src="js/canvas.js"></script>
+		<script type="text/javascript" src="js/block.js"></script>
+		<script type="text/javascript" src="js/aiBlock.js"></script>
+		<script type="text/javascript" src="js/pBlock.js"></script>
+		<script type="text/javascript" src="js/functions.js"></script>
+		<script type="text/javascript" src="js/init.js"></script>
+
+		<script type="text/javascript">
+
+		// GLOBALS
+			// set the amount of enemy blocks to create
+			var enemyBlockAmount = 20;
+			// blocks all - array
+			// used to loop through all the blocks and perform 
+			// necessary destruct and creation methods.
+			var blocksAll = [];
+
+			// game interval is a setInterval timer
+			// used by runGameInterval function in js/init.js
+			var gameInterval = '';
+		//
+
+		// initialize the application
+			(function init(){
+				var canvas = document.getElementsByTagName('canvas')[0];
+				var context = canvas.getContext('2d');
+				createEnemyBlocks(enemyBlockAmount);
+				showIntroText();
+				runGameInterval(true);
+			})();
+
+			// start playing by pressing the spacebar...
+			document.onkeypress = function(evt) {
+				evt = evt || window.event;
+				var charCode = evt.keyCode || evt.which;
+				if (charCode == '32') {
+					initGame();
+				}
+			};
+		//
+
+		</script>
 	</body>
 
 <html>
