@@ -57,9 +57,12 @@ function showIntroText(j){
 	var maxWidth = 400;
 	var textX = (canvas.width / 2) - (maxWidth / 2);
 	context.fillText('Welcome To Blox', textX, 200, maxWidth);
+	context.font = '30pt arial';
+	context.fillText('Instructions: Click behind the blue block to move it.', textX - 100, 300, maxWidth + 200);
+	context.fillText('You will eat smaller blocks and be eaten by larger blocks.', textX - 100, 400, maxWidth + 200);
 	context.font = '20pt arial';
 	if (j < 50 ){
-			context.fillText('Press spacebar to begin.', textX + 50, 300, maxWidth);
+			context.fillText('Press spacebar to begin.', textX + 80, 500, maxWidth);
 		}
 }
 // 
